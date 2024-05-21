@@ -1,0 +1,25 @@
+version: "3.8"
+
+services:
+    gaussian_splatting:                                        # (i)
+        build: .
+        container_name: nelson_gaussian_splatting
+        image: imagen_nelson_gaussian_splatting                               # (ii)
+        stdin_open: true
+        tty: true
+        network_mode: bridge
+        environment:
+            - PUID=1000
+            - PGID=1000
+            - TZ=Europe/Madrid
+        volumes:
+            - /media/datos/inv_nbmontas/gaussian_splatting_local_clone/gaussian-splatting:/home/ceiec/app:rw    # (iii)
+        ports:
+            - "8000:8000"                                       # (iv)
+        deploy:
+            resources:
+                reservations:
+                    devices:
+                        - driver: nvidia
+                          device_ids: ["0", "1", "2", "3"]                     # (v)
+                          capabilities: [gpu]
